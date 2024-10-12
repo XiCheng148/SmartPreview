@@ -1,0 +1,57 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Zip
+      run: npm run zip
+
+    - name: Find ZIP file
+      id: find_zip
+      run: |
+        zip_file=$(ls .output/*.zip)
+        echo "::set-output name=zip_file::$zip_file"
+
+    - name: Create Tag Name
+      run: echo "TAG_NAME=$(date +v%Y%m%d-%H%M%S)" >> $GITHUB_ENV
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.TAG_NAME }}
+        release_name: Release ${{ env.TAG_NAME }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.find_zip.outputs.zip_file }}
+        asset_name: ${{ steps.find_zip.outputs.zip_file }}
+        asset_content_type: application/zip

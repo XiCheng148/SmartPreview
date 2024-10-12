@@ -1,0 +1,23 @@
+{
+  "resetSetting": {
+    "message": "重置设置1"
+  },
+  "addCurrentUrl": {
+    "message": "添加当前页面1"
+  },
+  "delCurrentUrl": {
+    "message": "删除当前页面1"
+  },
+  "placeholder": {
+    "message": "请输入页面地址1"
+  },
+  "description": {
+    "message": "暂无黑名单1"
+  },
+  "postion": {
+    "message": "位置1"
+  },
+  "success": {
+    "message": "操作成功1"
+  }
+}

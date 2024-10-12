@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  max-width: 1280px;
+  max-height: 580px;
+  min-width: 420px;
+  margin: 0 auto;
+  /* overflow-y: scroll; */
+}
