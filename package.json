@@ -1,7 +1,7 @@
 {
-  "name": "wxt-starter",
+  "name": "smart-preview",
   "description": "",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",

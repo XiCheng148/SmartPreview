@@ -2,56 +2,91 @@ name: Build and Release
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*' # 触发条件：推送以 'v' 开头的标签
+  workflow_dispatch: # 允许手动触发工作流程
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
-    - name: Build
-      run: npm run build
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-    - name: Zip
-      run: npm run zip
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-    - name: Find ZIP file
-      id: find_zip
-      run: |
-        zip_file=$(ls .output/*.zip)
-        echo "::set-output name=zip_file::$zip_file"
+      - name: Install dependencies
+        run: pnpm install
 
-    - name: Create Tag Name
-      run: echo "TAG_NAME=$(date +v%Y%m%d-%H%M%S)" >> $GITHUB_ENV
+      - name: Build for Chrome
+        run: pnpm run build
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ env.TAG_NAME }}
-        release_name: Release ${{ env.TAG_NAME }}
-        draft: false
-        prerelease: false
+      - name: Zip Chrome extension
+        run: pnpm run zip
 
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ steps.find_zip.outputs.zip_file }}
-        asset_name: ${{ steps.find_zip.outputs.zip_file }}
-        asset_content_type: application/zip
+      - name: Build for Firefox
+        run: pnpm run build:firefox
+
+      - name: Zip Firefox extension
+        run: pnpm run zip:firefox
+
+      - name: Find ZIP files
+        id: find_zips
+        run: |
+          chrome_zip=$(ls .output/*-chrome.zip)
+          firefox_zip=$(ls .output/*-firefox.zip)
+          echo "chrome_zip=$chrome_zip" >> $GITHUB_OUTPUT
+          echo "firefox_zip=$firefox_zip" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Chrome Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.find_zips.outputs.chrome_zip }}
+          asset_name: smart-preview-chrome.zip
+          asset_content_type: application/zip
+
+      - name: Upload Firefox Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.find_zips.outputs.firefox_zip }}
+          asset_name: smart-preview-firefox.zip
+          asset_content_type: application/zip
