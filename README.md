@@ -20,7 +20,7 @@ Smart Preview 是一个强大的浏览器扩展，旨在提升您的网页浏览
 
 ## 安装
 
-1. 从[发布页面](https://github.com/YourUsername/SmartPreview/releases)下载最新版本的扩展文件（.zip）。
+1. 从[发布页面](https://github.com/XiCheng148/SmartPreview/releases)下载最新版本的扩展文件（.zip）。
 2. 解压下载的文件。
 3. 在浏览器中打开扩展管理页面。
 4. 启用"开发者模式"。
@@ -39,13 +39,13 @@ Smart Preview 是一个强大的浏览器扩展，旨在提升您的网页浏览
 
 ```bash
 # 安装依赖
-npm install
+pnpm i
 
 # 开发模式
-npm run dev
+pnpm run dev
 
 # 构建项目
-npm run build
+pnpm run build
 
 # 打包扩展
-npm run zip
+pnpm run zip
