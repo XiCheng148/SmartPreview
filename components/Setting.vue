@@ -1,18 +1,52 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { createI18n } from '@wxt-dev/i18n';
 import { Tabs } from 'wxt/browser';
-import { useSetting, ModeTextMap } from '@/utils/useSetting';
+import { useSetting, ModeTextMap, defaultSetting } from '@/utils/useSetting';
 
 const i18n = createI18n();
 
 const { setting, resetSetting } = useSetting();
+const localHeight = ref(setting.value?.height || defaultSetting.height);
+const localWidth = ref(setting.value?.width || defaultSetting.width);
 
 const currentTab = ref<Tabs.Tab | any>({});
 
 const toGithub = () => {
   window.open('https://github.com/XiCheng148');
 };
+
+const throttle = (func: Function, wait: number) => {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  let lastArgs: any[] | null = null;
+
+  return (...args: any[]) => {
+    lastArgs = args;
+    if (!timeout) {
+      timeout = setTimeout(() => {
+        if (lastArgs) {
+          func(...lastArgs);
+        }
+        timeout = null;
+        lastArgs = null;
+      }, wait);
+    }
+  };
+};
+
+const throttledUpdate = throttle(() => {
+  if (setting.value) {
+    setting.value = {
+      ...setting.value,
+      width: localWidth.value,
+      height: localHeight.value,
+    };
+  }
+}, 500);
+
+watch([localWidth, localHeight], () => {
+  throttledUpdate();
+});
 
 onMounted(async () => {
   const tabs = await browser.tabs.query({ active: true, currentWindow: true });
@@ -23,9 +57,7 @@ onMounted(async () => {
 <template>
   <div class="navbar bg-base-200 rounded-box">
     <div class="navbar-start">
-      <a class="btn btn-ghost text-xl" href="https://awesome-preiew.pages.dev/"
-        >Smart Preview</a
-      >
+      <a class="btn btn-ghost text-xl">Smart Preview</a>
     </div>
     <div class="avatar navbar-end">
       <button class="btn btn-ghost btn-circle" @click="toGithub">
@@ -46,7 +78,7 @@ onMounted(async () => {
     </div>
   </div>
   <div class="space-y-4" v-if="setting">
-    <div class="card-body gap-6">
+    <div class="card-body gap-6 p-4">
       <div class="flex flex-col justify-start gap-[0.5rem]">
         <h2 class="card-title">窗口模式</h2>
         <div class="join">
@@ -66,31 +98,31 @@ onMounted(async () => {
       <div class="flex flex-col justify-start gap-[0.5rem]">
         <h2 class="card-title">窗口比例</h2>
         <div class="flex gap-4">
-          <div class="form-control">
+          <div class="form-control flex-1">
             <label class="label">
               <span class="label-text">宽</span>
-              <span class="label-text">{{ setting.width }}%</span>
+              <span class="label-text">{{ localWidth }}%</span>
             </label>
             <input
               step="1"
               type="range"
               min="10"
               max="100"
-              v-model="setting.width"
+              v-model="localWidth"
               class="range"
             />
           </div>
-          <div class="form-control">
+          <div class="form-control flex-1">
             <label class="label">
               <span class="label-text">高</span>
-              <span class="label-text">{{ setting.height }}%</span>
+              <span class="label-text">{{ localHeight }}%</span>
             </label>
             <input
               step="1"
               type="range"
               min="10"
               max="100"
-              v-model="setting.height"
+              v-model="localHeight"
               class="range"
             />
           </div>
@@ -101,9 +133,9 @@ onMounted(async () => {
         {{ i18n.t('resetSetting') }}
       </button>
 
-      <pre class="bg-base-200 p-4 rounded-lg">{{
-        setting.smartModeConfig
-      }}</pre>
+      <div class="overflow-hidden ">
+        <pre class="bg-base-200 p-4 rounded-lg overflow-scroll">{{ setting.smartModeConfig }}</pre>
+      </div>
     </div>
   </div>
 </template>

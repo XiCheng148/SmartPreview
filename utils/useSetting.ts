@@ -35,7 +35,7 @@ export interface blackItem {
   height?: number;
 }
 
-const defaultSetting: Setting = {
+export const defaultSetting: Setting = {
   mode: Mode.Center,
   width: 90,
   height: 92,
@@ -63,12 +63,6 @@ export function useSetting() {
   watch(setting, saveSetting, { deep: true });
 
   loadSetting();
-
-  storage.watch(StorageId, newValue => {
-    if (newValue) {
-      setting.value = JSON.parse(newValue as string);
-    }
-  });
 
   const resetSetting = () => {
     settingState = { ...defaultSetting };
