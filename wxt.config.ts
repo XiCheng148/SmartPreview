@@ -11,10 +11,13 @@ export default defineConfig({
   manifest: {
     permissions: ['storage', 'tabs'],
     default_locale: 'zh',
+    browser_specific_settings: {
+      gecko: {
+        id: 'xichenglzp@firefox.com',
+      },
+    },
   },
   vite: () => ({
-    plugins: [
-      vue(),
-    ],
+    plugins: [vue()],
   }),
 });
