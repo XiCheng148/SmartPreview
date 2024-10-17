@@ -2,6 +2,8 @@
 
 Smart Preview 是一个强大的浏览器扩展，旨在提升您的网页浏览体验。它允许用户快速预览链接内容，而无需打开新的标签页，同时提供智能的窗口管理和自定义设置选项。
 
+<img width="1739" alt="image" src="https://github.com/user-attachments/assets/04477426-b625-4024-8993-a9b86a0f51a8">
+
 ## 主要特性
 
 - **快速预览**：通过Shift+点击链接，在弹出窗口中预览内容。
