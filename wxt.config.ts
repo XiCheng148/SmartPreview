@@ -8,15 +8,19 @@ export default defineConfig({
       vueTemplate: true,
     },
   },
-  manifest: {
+  manifest: ({ browser }) => ({
     permissions: ['storage', 'tabs'],
     default_locale: 'zh',
-    browser_specific_settings: {
-      gecko: {
-        id: 'xichenglzp@firefox.com',
-      },
-    },
-  },
+    ...(browser === 'firefox'
+      ? {
+          browser_specific_settings: {
+            gecko: {
+              id: 'xichenglzp@firefox.com',
+            },
+          },
+        }
+      : {}),
+  }),
   vite: () => ({
     plugins: [vue()],
   }),

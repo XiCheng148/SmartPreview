@@ -69,11 +69,11 @@ export function useSetting() {
     setting.value = settingState;
   };
 
-  onMounted(async () => {
-    storage.watch(StorageId, async newValue => {
-      console.log('storage.watch', JSON.parse(newValue as string));
-    });
-  });
+  // onMounted(async () => {
+  //   storage.watch(StorageId, async newValue => {
+  //     console.log('storage.watch', JSON.parse(newValue as string));
+  //   });
+  // });
 
   return {
     Mode,

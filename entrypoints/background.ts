@@ -1,6 +1,6 @@
 import { browser } from 'wxt/browser';
 import { defineBackground } from 'wxt/sandbox';
-import { useSetting, Mode } from '@/utils/useSetting';
+import { useSetting, Mode, defaultSetting } from '@/utils/useSetting';
 
 export default defineBackground(() => {
   const { setting } = useSetting();
@@ -14,6 +14,11 @@ export default defineBackground(() => {
   });
 
   async function openPopup(message: any) {
+    // 获取最新的设置
+    const storedSetting = await storage.getItem(StorageId);
+    setting.value = storedSetting
+      ? JSON.parse(storedSetting as string)
+      : defaultSetting;
     const url = new URL(message.url);
     url.searchParams.set('isSmartPopup', 'true');
 

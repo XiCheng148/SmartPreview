@@ -7,46 +7,12 @@ import { useSetting, ModeTextMap, defaultSetting } from '@/utils/useSetting';
 const i18n = createI18n();
 
 const { setting, resetSetting } = useSetting();
-const localHeight = ref(setting.value?.height || defaultSetting.height);
-const localWidth = ref(setting.value?.width || defaultSetting.width);
 
 const currentTab = ref<Tabs.Tab | any>({});
 
 const toGithub = () => {
   window.open('https://github.com/XiCheng148');
 };
-
-const throttle = (func: Function, wait: number) => {
-  let timeout: ReturnType<typeof setTimeout> | null = null;
-  let lastArgs: any[] | null = null;
-
-  return (...args: any[]) => {
-    lastArgs = args;
-    if (!timeout) {
-      timeout = setTimeout(() => {
-        if (lastArgs) {
-          func(...lastArgs);
-        }
-        timeout = null;
-        lastArgs = null;
-      }, wait);
-    }
-  };
-};
-
-const throttledUpdate = throttle(() => {
-  if (setting.value) {
-    setting.value = {
-      ...setting.value,
-      width: localWidth.value,
-      height: localHeight.value,
-    };
-  }
-}, 500);
-
-watch([localWidth, localHeight], () => {
-  throttledUpdate();
-});
 
 onMounted(async () => {
   const tabs = await browser.tabs.query({ active: true, currentWindow: true });
@@ -101,28 +67,28 @@ onMounted(async () => {
           <div class="form-control flex-1">
             <label class="label">
               <span class="label-text">宽</span>
-              <span class="label-text">{{ localWidth }}%</span>
+              <span class="label-text">{{ setting.width }}%</span>
             </label>
             <input
               step="1"
               type="range"
               min="10"
               max="100"
-              v-model="localWidth"
+              v-model.lazy.number="setting.width"
               class="range"
             />
           </div>
           <div class="form-control flex-1">
             <label class="label">
               <span class="label-text">高</span>
-              <span class="label-text">{{ localHeight }}%</span>
+              <span class="label-text">{{ setting.height }}%</span>
             </label>
             <input
               step="1"
               type="range"
               min="10"
               max="100"
-              v-model="localHeight"
+              v-model.lazy.number="setting.height"
               class="range"
             />
           </div>
