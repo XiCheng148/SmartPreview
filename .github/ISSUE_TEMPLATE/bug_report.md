@@ -1,38 +1,54 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
+name: 🐞 Bug Report
+title: "[bug] "
+description: Report a bug
+labels: ["type: bug", "status: needs triage"]
 
----
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## First of all
+        1. Please search for [existing issues](https://github.com/EcoPasteHub/EcoPaste/issues) about this problem first.
+        2. Make sure the [EcoPaste](https://github.com/EcoPasteHub/EcoPaste/releases/latest) you download is up to date.
+        3. Make sure it's an issue with EcoPaste and not something else you are using.
+        4. Remember to follow our community guidelines and be friendly.
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear description of what the bug is. Include screenshots if applicable.
+      placeholder: Bug description
+    validations:
+      required: true
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: A link to a reproduction repo or steps to reproduce the behaviour.
+      placeholder: |
+        Please provide a minimal reproduction or steps to reproduce, see this guide https://stackoverflow.com/help/minimal-reproducible-example
+        Why reproduction is required? see this article https://antfu.me/posts/why-reproductions-are-required
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: A clear description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+  - type: textarea
+    id: info
+    attributes:
+      label: Software Information
+      description: Copy the software information
+      render: text
+      placeholder: Copy the software information
+    validations:
+      required: true
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
