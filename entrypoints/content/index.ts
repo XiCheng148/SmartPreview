@@ -34,6 +34,8 @@ export default defineContentScript({
 
       // 失焦关闭
       window.addEventListener('blur', async event => {
+        const storedSetting: any = await storage.getItem(StorageId);
+        if (!JSON.parse(storedSetting).closeOnBlur) return;
         await browser.runtime.sendMessage({
           action: 'closePopup',
           url: removeSmartPopupParam(window.location.href, true),

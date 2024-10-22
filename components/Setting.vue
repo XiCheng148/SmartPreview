@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { createI18n } from '@wxt-dev/i18n';
 import { Tabs } from 'wxt/browser';
-import { useSetting, ModeTextMap, defaultSetting } from '@/utils/useSetting';
+import { useSetting, ModeTextMap } from '@/utils/useSetting';
 
 const i18n = createI18n();
 
@@ -62,6 +62,15 @@ onMounted(async () => {
       </div>
 
       <div class="flex flex-col justify-start gap-[0.5rem]">
+        <h2 class="card-title">失焦关闭窗口</h2>
+        <input
+          type="checkbox"
+          class="toggle"
+          v-model="setting.closeOnBlur"
+        />
+      </div>
+
+      <div class="flex flex-col justify-start gap-[0.5rem]">
         <h2 class="card-title">窗口比例</h2>
         <div class="flex gap-4">
           <div class="form-control flex-1">
@@ -99,8 +108,10 @@ onMounted(async () => {
         {{ i18n.t('resetSetting') }}
       </button>
 
-      <div class="overflow-hidden ">
-        <pre class="bg-base-200 p-4 rounded-lg overflow-scroll">{{ setting.smartModeConfig }}</pre>
+      <div class="overflow-hidden">
+        <pre class="bg-base-200 p-4 rounded-lg overflow-scroll">{{
+          setting.smartModeConfig
+        }}</pre>
       </div>
     </div>
   </div>

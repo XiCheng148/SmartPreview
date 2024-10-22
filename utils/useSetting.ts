@@ -21,6 +21,7 @@ export const ModeTextMap = [
 
 interface Setting {
   mode: Mode;
+  closeOnBlur: boolean;
   width: number;
   height: number;
   lang: string;
@@ -39,6 +40,7 @@ export const defaultSetting: Setting = {
   mode: Mode.Center,
   width: 90,
   height: 92,
+  closeOnBlur: false,
   lang: 'zh',
   smartModeConfig: {},
 };
