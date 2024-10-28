@@ -2,7 +2,7 @@
 
 Smart Preview 是一个强大的浏览器扩展，旨在提升您的网页浏览体验。它允许用户快速预览链接内容，而无需打开新的标签页，同时提供智能的窗口管理和自定义设置选项。
 
-<img width="1739" alt="image" src="https://github.com/user-attachments/assets/04477426-b625-4024-8993-a9b86a0f51a8">
+<img width="100%" alt="image" src="https://github.com/user-attachments/assets/04477426-b625-4024-8993-a9b86a0f51a8">
 
 ## 主要特性
 
@@ -35,15 +35,22 @@ Smart Preview 是一个强大的浏览器扩展，旨在提升您的网页浏览
 3. 使用窗口顶部的按钮进行复制链接、新标签页打开等操作。
 4. 按Esc键或点击窗口外部区域关闭预览。
 
+## 🚀 Feature
+
+- [ ] 始终小窗模式
+  - 白名单中的网站，点击链接都始终小窗打开。
+- [ ] 记忆小窗功能
+  - 不仅仅记忆小窗的大小位置，还记忆打开的次数，当以小窗打开的次数达到多少次的时候，就都用小窗打开。
+
 ## 开发
 
-本项目使用Vue 3和TypeScript开发，并使用WXT作为构建工具。
+使用 [Vue](https://vuejs.org/) + [wxt](https://wxt.dev/) + [daisyui](https://img.daisyui.com/images/daisyui-logo/daisyui-logomark.svg)
 
 ```bash
 # 安装依赖
 pnpm i
 
-# 开发模式
+# 启动项目
 pnpm run dev
 
 # 构建项目
@@ -53,7 +60,7 @@ pnpm run build
 pnpm run zip
 ```
 
-## 星标 
+## 星标
 
 <a href="https://star-history.com/#XiCheng148/SmartPreview&Date">
  <picture>
