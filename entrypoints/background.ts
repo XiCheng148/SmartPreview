@@ -17,11 +17,10 @@ export default defineBackground(() => {
     // 获取最新的设置
     const storedSetting = await storage.getItem(StorageId);
     setting.value = storedSetting
-      ? JSON.parse(storedSetting as string)
-      : defaultSetting;
+    ? JSON.parse(storedSetting as string)
+    : defaultSetting;
     const url = new URL(message.url);
     url.searchParams.set('isSmartPopup', 'true');
-
     let windowOptions;
 
     if (!setting.value) return;

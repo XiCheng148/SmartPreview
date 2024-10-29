@@ -13,12 +13,12 @@ export default defineConfig({
     default_locale: 'zh',
     ...(browser === 'firefox'
       ? {
-          browser_specific_settings: {
-            gecko: {
-              id: 'xichenglzp@firefox.com',
-            },
+        browser_specific_settings: {
+          gecko: {
+            id: '1284670996@qq.com',
           },
-        }
+        },
+      }
       : {}),
   }),
   vite: () => ({

@@ -2,21 +2,17 @@ import Button from '@/components/Button.vue';
 import { createApp } from 'vue';
 import { ContentScriptContext } from 'wxt/client';
 import { removeSmartPopupParam } from '@/utils/url';
+import VueDraggableResizable from 'vue-draggable-resizable'
 import './reset.css';
-
 export default defineContentScript({
   matches: ['*://*/*'],
   cssInjectionMode: 'ui',
   async main(ctx) {
     window.addEventListener('click', contentClickHandle, { capture: true });
 
-    // 插件打开的popup才注册~~~
-    // 检查 URL 参数
     const urlParams = new URLSearchParams(window.location.search);
     const isSmartPopup = urlParams.get('isSmartPopup') === 'true';
     if (isSmartPopup) {
-      console.log(`🚀 ~ main ~ curWindow:`, window);
-      // hover的时候展示按钮defineButton
       const ui = await defineButton(ctx);
       ui.mount();
       ctx.addEventListener(window, 'wxt:locationchange', event => {
@@ -72,7 +68,10 @@ function defineButton(ctx: ContentScriptContext) {
     position: 'modal',
     zIndex: 99999,
     onMount(container, _shadow, shadowHost) {
+      container.style.width = '100%';
+      container.style.height = '100%';
       const app = createApp(Button);
+      app.component("vue-draggable-resizable", VueDraggableResizable)
       app.mount(container);
       shadowHost.style.pointerEvents = 'none';
       return app;
@@ -88,7 +87,7 @@ async function contentClickHandle(event: any) {
   event.preventDefault();
   event.stopPropagation();
   const url = getLinkUrl(event);
-  console.log(`🚀 ~ contentClickHandle ~ url:`, url);
+
   if (url) {
     await browser.runtime.sendMessage({
       action: 'openPopup',

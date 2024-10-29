@@ -11,6 +11,9 @@ dependencies:
   vue:
     specifier: ^3.5.12
     version: 3.5.12(typescript@5.6.3)
+  vue-draggable-resizable:
+    specifier: ^3.0.0
+    version: 3.0.0(vue@3.5.12)
 
 devDependencies:
   '@vitejs/plugin-vue':
@@ -3537,6 +3540,14 @@ packages:
   /vscode-uri@3.0.8:
     resolution: {integrity: sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw==}
     dev: true
+
+  /vue-draggable-resizable@3.0.0(vue@3.5.12):
+    resolution: {integrity: sha512-kABSggcXPoDB8dOTVE09ZkccxiMdNDUaLl7STTeghsFE3o+mk653iumrkmjKLfIBA/w5ZXWJmarBqoqsmWLzEg==}
+    peerDependencies:
+      vue: ^3.2.25
+    dependencies:
+      vue: 3.5.12(typescript@5.6.3)
+    dev: false
 
   /vue-tsc@2.1.6(typescript@5.6.3):
     resolution: {integrity: sha512-f98dyZp5FOukcYmbFpuSCJ4Z0vHSOSmxGttZJCsFeX0M4w/Rsq0s4uKXjcSRsZqsRgQa6z7SfuO+y0HVICE57Q==}
