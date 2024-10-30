@@ -68,8 +68,6 @@ function defineButton(ctx: ContentScriptContext) {
     position: 'modal',
     zIndex: 99999,
     onMount(container, _shadow, shadowHost) {
-      container.style.width = '100%';
-      container.style.height = '100%';
       const app = createApp(Button);
       app.component("vue-draggable-resizable", VueDraggableResizable)
       app.mount(container);
