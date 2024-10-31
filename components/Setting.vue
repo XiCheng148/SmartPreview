@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
-import { createI18n } from '@wxt-dev/i18n';
-import { Tabs } from 'wxt/browser';
-import { useSetting, ModeTextMap } from '@/utils/useSetting';
+import { onMounted, ref, watch } from "vue";
+import { createI18n } from "@wxt-dev/i18n";
+import { Tabs } from "wxt/browser";
+import { useSetting, ModeTextMap } from "@/utils/useSetting";
 
 const i18n = createI18n();
 
@@ -11,19 +11,23 @@ const { setting, resetSetting } = useSetting();
 const currentTab = ref<Tabs.Tab | any>({});
 
 const toGithub = () => {
-  window.open('https://github.com/XiCheng148');
+  window.open("https://github.com/XiCheng148");
+};
+
+const openPopup = () => {
+  window.open(`chrome-extension://${browser.runtime.id}/popup.html`);
 };
 
 onMounted(async () => {
   const tabs = await browser.tabs.query({ active: true, currentWindow: true });
-  currentTab.value = tabs[0] || { url: '' };
+  currentTab.value = tabs[0] || { url: "" };
 });
 </script>
 
 <template>
-  <div class="navbar bg-base-200 rounded-box">
+  <div class="navbar bg-base-200">
     <div class="navbar-start">
-      <a class="btn btn-ghost text-xl">Smart Preview</a>
+      <a class="btn btn-ghost text-xl" @click="openPopup">Smart Preview</a>
     </div>
     <div class="avatar navbar-end">
       <button class="btn btn-ghost btn-circle" @click="toGithub">
@@ -43,76 +47,93 @@ onMounted(async () => {
       </button>
     </div>
   </div>
-  <div class="space-y-4" v-if="setting">
-    <div class="card-body gap-6 p-4">
-      <div class="flex flex-col justify-start gap-[0.5rem]">
-        <h2 class="card-title">窗口模式</h2>
-        <div class="join">
+  <div class="space-y-4 p-4" v-if="setting">
+    <div class="flex flex-col justify-start gap-[0.5rem]">
+      <h2 class="card-title">窗口模式</h2>
+      <div class="join">
+        <input
+          v-for="item in ModeTextMap"
+          :key="item.value"
+          :value="item.value"
+          v-model="setting.mode"
+          class="btn join-item !checked:bg-red-500"
+          type="radio"
+          name="options"
+          :aria-label="item.label"
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-col justify-start gap-[0.5rem]">
+      <h2 class="card-title">失焦关闭窗口</h2>
+      <input type="checkbox" class="toggle" v-model="setting.closeOnBlur" />
+    </div>
+
+    <div class="flex flex-col justify-start gap-[0.5rem]">
+      <h2 class="card-title">窗口比例</h2>
+      <div class="flex gap-4">
+        <div class="form-control flex-1">
+          <label class="label">
+            <span class="label-text">宽</span>
+            <span class="label-text">{{ setting.width }}%</span>
+          </label>
           <input
-            v-for="item in ModeTextMap"
-            :key="item.value"
-            :value="item.value"
-            v-model="setting.mode"
-            class="btn join-item !checked:bg-red-500"
-            type="radio"
-            name="options"
-            :aria-label="item.label"
+            step="1"
+            type="range"
+            min="10"
+            max="100"
+            v-model.lazy.number="setting.width"
+            class="range"
+          />
+        </div>
+        <div class="form-control flex-1">
+          <label class="label">
+            <span class="label-text">高</span>
+            <span class="label-text">{{ setting.height }}%</span>
+          </label>
+          <input
+            step="1"
+            type="range"
+            min="10"
+            max="100"
+            v-model.lazy.number="setting.height"
+            class="range"
           />
         </div>
       </div>
+    </div>
 
-      <div class="flex flex-col justify-start gap-[0.5rem]">
-        <h2 class="card-title">失焦关闭窗口</h2>
-        <input
-          type="checkbox"
-          class="toggle"
-          v-model="setting.closeOnBlur"
-        />
-      </div>
+    <button class="btn btn-outline" @click="resetSetting">
+      {{ i18n.t("resetSetting") }}
+    </button>
 
-      <div class="flex flex-col justify-start gap-[0.5rem]">
-        <h2 class="card-title">窗口比例</h2>
-        <div class="flex gap-4">
-          <div class="form-control flex-1">
-            <label class="label">
-              <span class="label-text">宽</span>
-              <span class="label-text">{{ setting.width }}%</span>
-            </label>
-            <input
-              step="1"
-              type="range"
-              min="10"
-              max="100"
-              v-model.lazy.number="setting.width"
-              class="range"
-            />
-          </div>
-          <div class="form-control flex-1">
-            <label class="label">
-              <span class="label-text">高</span>
-              <span class="label-text">{{ setting.height }}%</span>
-            </label>
-            <input
-              step="1"
-              type="range"
-              min="10"
-              max="100"
-              v-model.lazy.number="setting.height"
-              class="range"
-            />
+    <div class="grid grid-cols-2">
+      <div
+        v-for="(item, key, index) in setting.smartModeConfig"
+        class="card card-side"
+      >
+        <figure class="lg:w-[128px] w-[64px]">
+          <img :src="`https://api.faviconkit.com/${key}/128`" :alt="key" />
+        </figure>
+        <div class="card-body overflow-hidden">
+          <span class="card-title lg:text-[20px] text-14px">{{ key }}</span>
+          <div class="flex gap-2">
+            <div class="flex flex-col gap-2">
+              <span class=""> left:{{ item.left }}px</span>
+              <span class=""> top:{{ item.top }}px</span>
+            </div>
+            <div class="flex flex-col gap-2">
+              <span class=""> width:{{ item.width }}px</span>
+              <span class=""> height:{{ item.height }}px</span>
+            </div>
           </div>
         </div>
       </div>
-
-      <button class="btn btn-outline" @click="resetSetting">
-        {{ i18n.t('resetSetting') }}
-      </button>
-
-      <div class="overflow-hidden">
-        <pre class="bg-base-200 p-4 rounded-lg overflow-scroll">{{
-          setting.smartModeConfig
-        }}</pre>
-      </div>
     </div>
+    <!-- <div class="overflow-hidden">
+      <pre class="bg-base-200 p-4 rounded-lg overflow-scroll">{{
+        setting.smartModeConfig
+      }}</pre>
+    </div> -->
   </div>
 </template>

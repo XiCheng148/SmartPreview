@@ -9,7 +9,9 @@ export default defineConfig({
     },
   },
   manifest: ({ browser }) => ({
-    permissions: ['storage', 'tabs'],
+    permissions: ['activeTab', 'storage', 'tabs'],
+    action: {},
+    page_action: {},
     default_locale: 'zh',
     ...(browser === 'firefox'
       ? {
@@ -19,7 +21,8 @@ export default defineConfig({
           },
         },
       }
-      : {}),
+      : {
+      }),
   }),
   vite: () => ({
     plugins: [vue()],
