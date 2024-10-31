@@ -19,8 +19,6 @@ export default defineContentScript({
         ui.mount();
       });
 
-      const body = document.querySelector('body');
-
       // 按键关闭
       window.addEventListener('keydown', event => {
         if (event.key === 'Escape') {

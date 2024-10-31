@@ -4,4 +4,7 @@
 
 body{
   margin: 0;
+  background: transparent !important;
+  width: 100%;
+  height: 100%;
 }
