@@ -17,7 +17,7 @@ export default defineConfig({
       ? {
         browser_specific_settings: {
           gecko: {
-            id: '1284670996@qq.com',
+            id: 'xichenglzp1231231231231@firefox.com',
           },
         },
       }

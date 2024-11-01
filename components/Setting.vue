@@ -15,7 +15,11 @@ const toGithub = () => {
 };
 
 const openPopup = () => {
-  window.open(`chrome-extension://${browser.runtime.id}/popup.html`);
+  if (/firefox/i.test(navigator.userAgent)) {
+    browser.tabs.create({ url: browser.runtime.getURL("/popup.html") });
+  } else {
+    browser.tabs.create({ url: browser.runtime.getURL("/popup.html") });
+  }
 };
 
 onMounted(async () => {
